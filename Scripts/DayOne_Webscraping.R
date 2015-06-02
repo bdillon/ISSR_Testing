@@ -47,14 +47,12 @@ TokenizeString <- function(string){
 
 ParseBill <- function(cur.bill) {
   cur.page <- cur.bill$page
-  
   if (length(grep("dc.creator",cur.page)) > 0) {
     cur.creator <- str_split(cur.page[grep("dc.creator",cur.page)],"content=\"")[[1]][2]
     cur.bill$creator <- str_split(cur.creator,"\"")[[1]][1]
   } else {
     cur.bill$creator <- "None"
   }
-  
   return(cur.bill)
 }
 
@@ -125,15 +123,10 @@ for (bill in bills.processed) {
 }
 
 ###### Histogram plots of:
-######    "america" by author
+######    "defense" by author
 ######    "eduction" by author
 
 ggplot(subset(bills.summary,Word == "defense" | Word == "education"),
               aes(y = Freq, x = Word)) + geom_bar(stat='identity') + facet_wrap(~Author)
-
-
-
-
-
 
 
