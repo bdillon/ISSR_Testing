@@ -12,17 +12,24 @@ ScrapePage <- function(cur.url) {
   cur.page <- str_split(cur.page, '\n')[[1]]
   start <- grep("112th CONGRESS", cur.page)
   end <- grep("&lt;all&gt;", cur.page)
+  
+  ### Three dodgy types:
+  ### 1) Never found either start, or end: never found any text
+  ### 2) Sometimes they were 'NA's... unclear why they were NA's
+  ### 3) 
+  
   if(length(end) > 0 & length(start) > 0){
     # Get just the text
-    print(start)
-    print(end)
     if(!is.na(start) & !is.na(end)){
       if(start < end & start > 0 & end > 0){
         bill.text <- cur.page[start:end]
       }else{
+        print(start)
+        print(end)
         bill.text <- ""
       }
     }else{
+      print(page)
       bill.text <- ""
     }
   }else{
@@ -59,7 +66,7 @@ ParseBill <- function(cur.bill) {
 TokenizeBill <- function(cur.bill) {
   cur.text <- cur.bill$text
   tokenized.text <- unlist(
-    lapply(cur.text, function(x) TokenizeString(x))
+    lapply(cur.text, TokenizeString)
   )
   cur.bill$tokenized <- tokenized.text
   cur.bill$N <- length(tokenized.text)
@@ -124,7 +131,7 @@ for (bill in bills.processed) {
 
 ###### Histogram plots of:
 ######    "defense" by author
-######    "eduction" by author
+######    "education" by author
 
 ggplot(subset(bills.summary,Word == "defense" | Word == "education"),
               aes(y = Freq, x = Word)) + geom_bar(stat='identity') + facet_wrap(~Author)
