@@ -122,6 +122,11 @@ bills.raw <- lapply(bill.urls, ScrapePage)
 bills.tokenized <- lapply(bills.raw, TokenizeBill)
 bills.processed <- lapply(bills.tokenized, ParseBill)
 
+###### Save processed text
+
+save(bills.processed, file = "./Data/Processed_Bills.Rdata")
+load("./Data/Processed_Bills.Rdata")
+
 ###### Unwrap into data.frame object
 
 bills.summary <- {}
